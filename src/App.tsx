@@ -3,7 +3,8 @@ import Header from 'components/Header';
 import NoticeArea from 'components/NoticeArea';
 import BetArea from 'components/BetArea';
 import Card from 'components/Card';
-import { AppState, BetPositions, GameStatus, ICard, GameResult } from 'types';
+import { handleCardClick, disableCards } from 'utils/cardUtils';
+import { AppState, BetPositions, GameStatus, GameResult } from 'types';
 
 const cards = [
 	{
@@ -34,7 +35,7 @@ export default class App extends React.Component<object, AppState> {
 	constructor(props: object) {
 		super(props);
 		this.state = {
-			balance: 5000,
+			balance: 500,
 			bet: 0,
 			win: 0,
 			step: 500,
@@ -47,109 +48,6 @@ export default class App extends React.Component<object, AppState> {
 			cards,
 		};
 	}
-
-	handleCardClick = (card: ICard) => {
-		const currentCardValue = card.value;
-		const isSelectedCard = this.state.playerBet.map(betCard => betCard.value).includes(currentCardValue);
-
-		if (this.state.balance === 0) {
-			return;
-		}
-
-		if (this.state.playerBet.length !== 2 && !isSelectedCard) {
-			this.addPlayerBet(card);
-			this.updateBalance();
-			this.updateCardBetAmount(card);
-			this.updateWinRate();
-			return;
-		}
-
-		if (isSelectedCard) {
-			this.updateBalance();
-			this.updateCardBetAmount(card);
-			this.updateWinRate();
-		}
-	};
-
-	disableUnSelectedCards = () => {
-		this.setState(prevState => {
-			const { cards, playerBet } = prevState;
-			const updatedCards = cards.map(card => {
-				const isBetCard = playerBet.map(betCard => betCard.value).includes(card.value);
-				return isBetCard ? card : { ...card, disabled: true };
-			});
-			return {
-				...prevState,
-				cards: updatedCards,
-			};
-		});
-	};
-
-	updateWinRate = () => {
-		this.setState((prevState: AppState) => ({
-			winRate: prevState.playerBet.length >= 2 ? 3 : 14,
-		}));
-	};
-
-	updateBalance = () => {
-		this.setState(
-			(prevState): AppState => {
-				const { balance, bet } = prevState;
-				const { step } = this.state;
-
-				const updatedBalance = balance - step;
-				const updatedBet = bet + step;
-
-				return {
-					...prevState,
-					balance: updatedBalance,
-					bet: updatedBet,
-				};
-			},
-			() => {
-				if (this.state.balance === 0) {
-					this.disableUnSelectedCards();
-				}
-			}
-		);
-	};
-
-	addPlayerBet = (card: ICard) => {
-		const newPlayerBet = {
-			value: card.value,
-			winsAgainst: card.winsAgainst,
-		};
-
-		this.setState(
-			(prevState): AppState => {
-				const { playerBet } = prevState;
-				const updatedPlayerBet = [...playerBet, newPlayerBet];
-
-				return {
-					...prevState,
-					playerBet: updatedPlayerBet,
-				};
-			},
-			() => {
-				if (this.state.playerBet.length === 2) {
-					this.disableUnSelectedCards();
-				}
-			}
-		);
-	};
-
-	updateCardBetAmount = (card: ICard) => {
-		this.setState(prevState => {
-			const prevCards = prevState.cards;
-			const { step } = this.state;
-			return {
-				cards: prevCards.map(prevCard => {
-					const currentCard = prevCard.value === card.value;
-					return currentCard ? { ...prevCard, betAmount: prevCard.betAmount + step } : prevCard;
-				}),
-			};
-		});
-	};
 
 	getRandomCard = () => {
 		const randomIndex = Math.floor(Math.random() * cards.length);
@@ -171,36 +69,6 @@ export default class App extends React.Component<object, AppState> {
 			this.addPcBet();
 			this.setState({ status: GameStatus.Pending });
 		}
-	};
-
-	handleResetGame = () => {
-		this.setState(
-			prevState => {
-				const { balance, win, result, bet } = prevState;
-
-				const updateBalance =
-					result === GameResult.Win ? balance + win : result === GameResult.Draw ? balance + bet : balance;
-
-				return {
-					...prevState,
-					balance: updateBalance,
-					bet: 0,
-					win: 0,
-					playerBet: [],
-					status: GameStatus.Start,
-					pcBet: null,
-					cards: cards.map(card => ({ ...card, betAmount: 0 })),
-				};
-			},
-			() => {
-				if (this.endGameTimeout) {
-					clearTimeout(this.endGameTimeout);
-				}
-				if (this.state.balance === 0) {
-					this.disableUnSelectedCards();
-				}
-			}
-		);
 	};
 
 	checkWinner = () => {
@@ -266,20 +134,51 @@ export default class App extends React.Component<object, AppState> {
 		}, 5000);
 	};
 
+	handleResetGame = (): void => {
+		this.setState(prevState => {
+			const { balance, win, result, bet } = prevState;
+			const updateBalance =
+				result === GameResult.Win ? balance + win : result === GameResult.Draw ? balance + bet : balance;
+			const updatedCards = cards.map(card => ({ ...card, betAmount: 0 }));
+
+			return {
+				balance: updateBalance,
+				bet: 0,
+				win: 0,
+				playerBet: [],
+				status: GameStatus.Start,
+				pcBet: null,
+				cards: updatedCards,
+			};
+		}, this.handleResetGameCallback);
+	};
+
+	handleResetGameCallback = (): void => {
+		if (this.endGameTimeout) {
+			clearTimeout(this.endGameTimeout);
+		}
+		if (this.state.balance === 0) {
+			this.setState(prevState => ({
+				cards: disableCards(prevState),
+			}));
+		}
+	};
+
 	render() {
-		const { balance, bet, win, cards, status } = this.state;
+		const { balance, bet, win, cards, status, result, playerBet, pcBet } = this.state;
+		const winnerCard = this.getWinnerBet();
 		return (
 			<>
 				<Header balance={balance} bet={bet} win={win} />
 				<main className="app">
 					<NoticeArea
-						result={this.state.result}
-						playerBet={this.state.playerBet}
-						winnerCard={this.getWinnerBet()}
-						pcBet={this.state.pcBet}
-						win={this.state.win}
+						result={result}
+						playerBet={playerBet}
+						winnerCard={winnerCard}
+						pcBet={pcBet}
+						win={win}
 						status={status}
-						bet={this.state.bet}
+						bet={bet}
 					/>
 					<BetArea status={status}>
 						{cards.map(card => (
@@ -290,7 +189,7 @@ export default class App extends React.Component<object, AppState> {
 								betAmount={card.betAmount}
 								winner={card?.winner}
 								disabled={card?.disabled}
-								onClick={() => this.handleCardClick(card)}
+								onClick={() => handleCardClick(card, this.state, this.setState.bind(this))}
 							/>
 						))}
 					</BetArea>

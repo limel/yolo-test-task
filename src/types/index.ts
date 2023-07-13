@@ -33,7 +33,7 @@ export interface AppState extends HeaderState {
 	status: GameStatus;
 	result: GameResult | null;
 	winnerCard: BetPositions | null;
-	playerBet: Bet[] | [];
+	playerBet: Bet[];
 	pcBet: Bet | null;
 	cards: ICard[];
 }
@@ -47,3 +47,5 @@ export interface ICard {
 	winner?: boolean;
 	disabled?: boolean;
 }
+
+export type AppSetState = (prevState: AppState | ((prevState: AppState) => AppState)) => void;
