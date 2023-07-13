@@ -1,46 +1,47 @@
-# Getting Started with Create React App
+# Test task specification:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Your test task is to create a React app, using Typescript with strict typing.
+The app is a scissors, rock, paper game, with the ability to bet on the winning position.
 
-## Available Scripts
+## Specifications
 
-In the project directory, you can run:
+- Player starts with a balance of 5000.
+- Each bet should be 500 (player can place several bets on any position: 500, 1000,
+  1500 etc)
+- Player can not bet more than 2 positions per one game
+- Winning rate for bet on 1 position is 14
+- Winning rate for bet on 2 positions is 3
 
-### `yarn start`
+## Requirements
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- There should be three betting positions, rock, paper, scissors.
+- Player can bet on rock, paper, or scissors, but not on all three at the same time.
+- The bet is reduced from the balance.
+- When betting done button is clicked, the computer runs a random paper, scissors,
+  rock match.
+- Player choice should be compared to computers choice and only one bet can win –
+  every tie counts as loss
+- If player bets on one of them and wins, the return is 14 times the bet.
+- If player bets on two of them and wins the return is 3 times the bet.
+- Loss bets are not returned to player
+- Bets with tie result are returned to player
+- After round ends the return adds to the balance
+- Player cannot bet if player has less balance than available for bet.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+NB please keep in mind that Title ROCK vs PAPER on the second screen means “computer choice ROCK versus player choice PAPER” — not ROCK bet vs PAPER bet.
 
-### `yarn test`
+## Acceptance criteria
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Every point of task should be implemented
 
-### `yarn build`
+### Junior level
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+In general implementing every point is enough for junior. Optionally we pay attention to such things as concistency, variable naming, files and folders structure.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Middle level
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+We pay attention to everything mentioned for Junior (optional part is mandatory for middle). Additionally we check UX and compare UI with mockups more thorough and we expect following clean code principles
 
-### `yarn eject`
+### Senior level
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+We pay attention to everything mentioned for middle. Additionally we expect code to be flexible and maintainable. Changing of requirements should not lead to rewriting half of application. Changing of specifications should cause minimal changes.
