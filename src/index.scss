@@ -44,15 +44,6 @@ ul {
   min-height: 100svh;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  padding: 2rem;
-  margin: 0 auto;
-  max-width: 900px;
-}
-
 .button {
   display: flex;
   align-items: center;

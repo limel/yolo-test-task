@@ -1,0 +1,27 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 2rem;
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+.notice {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  text-transform: uppercase;
+  color: var(--accent-text-color);
+  font-weight: 700;
+  opacity: 0;
+  visibility: hidden;
+  font-size: 0;
+  transition: var(--transition) opacity, var(--transition) visibility, var(--transition) font-size;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    font-size: 1rem;
+  }
+}

@@ -58,13 +58,6 @@ const NoticeArea: React.FC<NoticeAreaProps> = ({ playerBet, winnerCard, pcBet, w
 	return (
 		<section className={s.container}>
 			<div
-				className={cn(s.notice, {
-					[s.active]: status === GameStatus.Start,
-				})}>
-				<span className={s.notice__text}>Make your bet</span>
-			</div>
-
-			<div
 				className={cn(s.bets, {
 					[s.active]: status === GameStatus.Pending,
 				})}>

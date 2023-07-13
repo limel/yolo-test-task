@@ -14,13 +14,25 @@
   visibility: hidden;
   font-size: 0;
   transition: var(--transition) opacity, var(--transition) visibility, var(--transition) font-size;
+}
 
+.bets {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bets.active {
+  span {
+    margin: 10px 1.5rem 0 1.5rem;
+  }
 }
 
 .active {
   opacity: 1;
   visibility: visible;
   font-size: 3rem;
+  line-height: 1;
 
   span {
     display: block;
@@ -31,14 +43,5 @@
       display: inline;
       color: #fff;
     }
-  }
-
-
-}
-
-.bets.active {
-  span {
-    display: inline;
-    margin: 1.5rem
   }
 }

@@ -34,7 +34,7 @@ export default class App extends React.Component<object, AppState> {
 	constructor(props: object) {
 		super(props);
 		this.state = {
-			balance: 500,
+			balance: 5000,
 			bet: 0,
 			win: 0,
 			step: 500,
@@ -282,7 +282,7 @@ export default class App extends React.Component<object, AppState> {
 						status={status}
 						bet={this.state.bet}
 					/>
-					<BetArea>
+					<BetArea status={status}>
 						{cards.map(card => (
 							<Card
 								key={card.value}
