@@ -11,10 +11,15 @@ interface CardProps {
 	onClick: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ title, betAmount, color, onClick, winner, disabled }) => (
+const Card: React.FC<CardProps> = ({ title, betAmount, color, winner, disabled, onClick }) => (
 	<li
 		onClick={onClick}
 		tabIndex={0}
+		onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => {
+			if (event.key === 'Enter' || event.key === ' ') {
+				onClick();
+			}
+		}}
 		className={cn(s.card, {
 			[s.card_winner]: winner,
 			[s.card_disabled]: disabled,

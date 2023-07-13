@@ -221,7 +221,6 @@ export default class App extends React.Component<object, AppState> {
 			if (isTie) {
 				this.handleDraw();
 			} else {
-				const winnerBet = pcBet;
 				this.handlePcWin();
 			}
 		}
