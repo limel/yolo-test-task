@@ -1,0 +1,87 @@
+.card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  background-color: var(--card-color);
+  padding: 2.2rem 3rem;
+  border-radius: 1rem;
+  border: 2px solid rgba(255, 255, 255, .4);
+  position: relative;
+  transition: var(--transition) border, var(--transition) opacity;
+  cursor: pointer;
+  user-select: none;
+
+
+  &::after {
+    content: '';
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    filter: brightness(3) contrast(6);
+    background-color: var(--card-color);
+    border-radius: 1rem;
+    z-index: -1;
+    opacity: 0;
+    transition: var(--transition) opacity;
+  }
+
+
+  .bet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    color: #000;
+    font-weight: 700;
+    aspect-ratio: 1/1;
+    height: 60px;
+    font-size: 1.2rem;
+    background-color: rgb(227, 227, 227);
+    border-radius: 10rem;
+    border: 4px solid #225eff;
+    transition: var(--transition) opacity;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 1rem;
+
+    text-transform: uppercase;
+    color: var(--card-color);
+    filter: brightness(3) contrast(6);
+  }
+
+
+  &_disabled {
+    opacity: .5;
+    pointer-events: none;
+
+
+    .bet {
+      opacity: 0;
+      visibility: hidden;
+      height: 0;
+    }
+
+    &:focus {
+      border-color: transparent;
+      outline: none;
+    }
+  }
+
+  &_winner,
+  &:focus:not(.card_disabled) {
+    border-color: transparent;
+    outline: none;
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}

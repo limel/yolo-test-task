@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  min-height: 160px;
+}
+
+.notice,
+.bets,
+.winner {
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  font-size: 0;
+  transition: var(--transition) opacity, var(--transition) visibility, var(--transition) font-size;
+
+}
+
+.active {
+  opacity: 1;
+  visibility: visible;
+  font-size: 3rem;
+
+  span {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--accent-text-color);
+
+    >span {
+      display: inline;
+      color: #fff;
+    }
+  }
+
+
+}
+
+.bets.active {
+  span {
+    display: inline;
+    margin: 1.5rem
+  }
+}
